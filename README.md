@@ -27,6 +27,11 @@ Proyek ini adalah implementasi algoritma **Mini-AES 16-bit** menggunakan Python 
   - Kunci awal 16-bit diperluas menjadi 3 kunci ronde (round keys) dengan operasi substitusi dan XOR sederhana.
 
 
+## Flowchart 
+### Flowchart Mini-AES
+![Image](https://github.com/user-attachments/assets/00d98bfb-90e8-43e1-ab14-6636372cab76)
+
+
 ## Implementasi Program
 
 - Input plaintext dan key dalam 4 digit hex.
