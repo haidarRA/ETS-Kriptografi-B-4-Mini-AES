@@ -32,6 +32,10 @@ Proyek ini adalah implementasi algoritma **Mini-AES 16-bit** menggunakan Python 
 ![Image](https://github.com/user-attachments/assets/00d98bfb-90e8-43e1-ab14-6636372cab76)
 
 
+### Flowchart Key Expansion
+![Image](https://github.com/user-attachments/assets/c9b44ae7-fa4b-445f-aa03-b723014c9660)
+
+
 ## Implementasi Program
 
 - Input plaintext dan key dalam 4 digit hex.
