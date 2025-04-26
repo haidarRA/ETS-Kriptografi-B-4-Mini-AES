@@ -52,7 +52,7 @@ def encrypt(plaintext, key):
     for i in range(2):
         state = sub_nibbles(state)
         state = shift_rows(state)
-        if i < 2:
+        if i < 1:
             state = mix_columns(state)
         state = add_round_key(state, round_keys[i+1])
     return state
