@@ -131,3 +131,32 @@ Ini memperlihatkan algoritma berhasil melakukan difusi dan konfusi terhadap inpu
 5. **Tidak Layak untuk Aplikasi Keamanan Nyata**  
    Mini-AES sama sekali tidak boleh digunakan untuk mengamankan data sensitif dalam skenario dunia nyata karena keterbatasan keamanannya yang signifikan.
 
+
+## Analisis Avalanche Effect pada Mini-AES
+
+Avalanche Effect adalah properti penting dalam algoritma kriptografi yang menyatakan bahwa perubahan kecil pada input (plaintext atau key) seharusnya menghasilkan perubahan signifikan pada output (ciphertext). Ini adalah salah satu karakteristik kunci dari algoritma kriptografi yang baik, karena mempersulit analisis statistik dan serangan kriptanalisis.
+
+## Definisi Formal
+
+Avalanche Effect didefinisikan sebagai berikut: Jika kita mengubah 1 bit dari input (plaintext atau key), idealnya sekitar 50% dari bit-bit output (ciphertext) akan berubah. Properti ini memastikan bahwa hubungan input-output sangat non-linear dan sulit untuk diprediksi.
+
+## Implementasi Pengujian Avalanche Effect
+
+Dalam implementasi ini, kami melakukan pengujian Avalanche Effect pada Mini-AES dengan dua pendekatan:
+
+1. **Perubahan pada Plaintext**: Mengubah 1 bit dari plaintext dan membandingkan ciphertext hasil dengan ciphertext asli.
+2. **Perubahan pada Key**: Mengubah 1 bit dari key dan membandingkan ciphertext hasil dengan ciphertext asli.
+
+## Metode Pengujian
+
+Prosedur pengujian yang digunakan:
+
+1. Enkripsi plaintext asli dengan key asli untuk mendapatkan ciphertext referensi
+2. Untuk setiap posisi bit (0-15) dalam input (plaintext atau key):
+   - Flip bit pada posisi tersebut
+   - Enkripsi input yang dimodifikasi
+   - Hitung berapa banyak bit yang berubah dalam ciphertext
+   - Hitung persentase perubahan (jumlah bit yang berubah / total bit)
+3. Hitung rata-rata persentase perubahan bit untuk semua posisi bit
+
+
