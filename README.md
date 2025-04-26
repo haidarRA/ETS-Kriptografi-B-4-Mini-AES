@@ -12,7 +12,79 @@
 
 
 
+Proyek ini adalah implementasi algoritma **Mini-AES 16-bit** menggunakan Python dan GUI berbasis Tkinter.
 
+## Spesifikasi Algoritma Mini-AES
+
+- **Plaintext dan Key**: 16-bit (4 nibbles, 4 hex digit)
+- **Operasi dalam Algoritma**:
+  - **SubNibbles**: Substitusi menggunakan 4-bit S-Box.
+  - **ShiftRows**: Pergeseran baris sederhana (swap).
+  - **MixColumns**: Operasi matriks pada GF(2⁴).
+  - **AddRoundKey**: XOR antara state dan kunci ronde.
+- **Jumlah Ronde**: 3 (Initial AddRoundKey + 2 Rounds)
+- **Key Expansion**:
+  - Kunci awal 16-bit diperluas menjadi 3 kunci ronde (round keys) dengan operasi substitusi dan XOR sederhana.
+
+
+## Implementasi Program
+
+- Input plaintext dan key dalam 4 digit hex.
+- Proses enkripsi ditampilkan step-by-step:
+  - SubNibbles
+  - ShiftRows
+  - MixColumns (hanya di round 1)
+  - AddRoundKey
+
+Menampilkan Ciphertext hasil akhir.
+
+
+## Penjelasan Testcase
+
+Berikut 3 test case yang digunakan untuk validasi:
+| Test Case | Plaintext | Key   | Expected Ciphertext | Status |
+|:---------:|:---------:|:-----:|:-------------------:|:------:|
+| 1         | 1234      | 5678  | 910A                | ✅      |
+| 2         | 0000      | FFFF  | 02FD       | ✅      |
+| 3         | ABCD      | 0123  | AB97       | ✅      |
+
+**Test Case 1**
+
+Plaintext: 1234
+
+Key: 5678
+
+Expected Ciphertext: 910A
+
+Penjelasan:
+Proses enkripsi mengikuti semua tahapan Mini-AES: AddRoundKey, SubNibbles, ShiftRows, MixColumns, AddRoundKey.
+Setiap transformasi dilakukan benar dan menghasilkan ciphertext akhir 910A.
+Validasi berhasil.
+
+**Test Case 2**
+
+Plaintext: 0000
+
+Key: FFFF
+
+Expected Ciphertext: 02FD
+
+Penjelasan:
+Plaintext semua nol (0000) dikombinasikan dengan key semua satu (FFFF) memunculkan perubahan bit maksimal.
+Melalui semua operasi Mini-AES, didapat hasil akhir 02FD.
+Transformasi bitwise dan substitusi terbukti berjalan dengan baik.
+
+**Test Case 3**
+
+Plaintext: ABCD
+
+Key: 0123
+
+Expected Ciphertext: AB97
+
+Penjelasan:
+Plaintext dan key yang lebih acak memberikan ciphertext AB97 setelah semua tahapan Mini-AES.
+Ini memperlihatkan algoritma berhasil melakukan difusi dan konfusi terhadap input data.
 
 ## Analisis: kelebihan dan keterbatasan Mini-AES
 
