@@ -10,11 +10,9 @@
 | Raditya Hardian Santoso | 5027231033 |
 | Danendra Fidel Khansa   | 5027231063 |
 
-
-
 Proyek ini adalah implementasi algoritma **Mini-AES 16-bit** menggunakan Python dan GUI berbasis Tkinter.
 
-## Spesifikasi Algoritma Mini-AES
+# `Spesifikasi Algoritma Mini-AES`
 
 - **Plaintext dan Key**: 16-bit (4 nibbles, 4 hex digit)
 - **Operasi dalam Algoritma**:
@@ -26,15 +24,15 @@ Proyek ini adalah implementasi algoritma **Mini-AES 16-bit** menggunakan Python 
 - **Key Expansion**:
   - Kunci awal 16-bit diperluas menjadi 3 kunci ronde (round keys) dengan operasi substitusi dan XOR sederhana.
 
+## Flowchart
 
-## Flowchart 
 ### Flowchart Mini-AES
+
 ![Image](https://github.com/user-attachments/assets/00d98bfb-90e8-43e1-ab14-6636372cab76)
 
-
 ### Flowchart Key Expansion
-![Image](https://github.com/user-attachments/assets/c9b44ae7-fa4b-445f-aa03-b723014c9660)
 
+![Image](https://github.com/user-attachments/assets/c9b44ae7-fa4b-445f-aa03-b723014c9660)
 
 ## Implementasi Program
 
@@ -47,15 +45,14 @@ Proyek ini adalah implementasi algoritma **Mini-AES 16-bit** menggunakan Python 
 
 Menampilkan Ciphertext hasil akhir.
 
-
 ## Penjelasan Testcase
 
 Berikut 3 test case yang digunakan untuk validasi:
-| Test Case | Plaintext | Key   | Expected Ciphertext | Status |
+| Test Case | Plaintext | Key | Expected Ciphertext | Status |
 |:---------:|:---------:|:-----:|:-------------------:|:------:|
-| 1         | 1234      | 5678  | 910A                | ✅      |
-| 2         | 0000      | FFFF  | 02FD       | ✅      |
-| 3         | ABCD      | 0123  | AB97       | ✅      |
+| 1 | 1234 | 5678 | 910A | ✅ |
+| 2 | 0000 | FFFF | 02FD | ✅ |
+| 3 | ABCD | 0123 | AB97 | ✅ |
 
 **Test Case 1**
 
@@ -131,6 +128,70 @@ Ini memperlihatkan algoritma berhasil melakukan difusi dan konfusi terhadap inpu
 5. **Tidak Layak untuk Aplikasi Keamanan Nyata**  
    Mini-AES sama sekali tidak boleh digunakan untuk mengamankan data sensitif dalam skenario dunia nyata karena keterbatasan keamanannya yang signifikan.
 
+# `Spesifikasi Tambahan`
+
+## Implementasi Dekripsi Mini-AES
+
+### Fungsi Dekripsi
+
+berikut merupakan fungsi dekripsi dari Mini_AES
+
+```sh
+def decrypt(ciphertext, key):
+    round_keys = key_expansion(key)
+    state = ciphertext
+
+    # Round 2
+    state = add_round_key(state, round_keys[2])
+    state = inv_shift_rows(state)
+    state = inv_sub_nibbles(state)
+
+    # Round 1
+    state = add_round_key(state, round_keys[1])
+    state = inv_mix_columns(state)
+    state = inv_shift_rows(state)
+    state = inv_sub_nibbles(state)
+
+    # Round 0
+    state = add_round_key(state, round_keys[0])
+
+    return state
+```
+
+### Implementasi Inverse Operation :
+
+- Inverse S-Box :
+  ```sh
+  def inv_sub_nibbles(state):
+    return [INV_SBOX[n] for n in state]
+  ```
+  Fungsi ini menggunakan dictionary `INV_SBOX`, yang merupakan invers dari `SBOX` yang digunakan pada enkripsi, untuk melakukan substitusi nibble secara terbalik.
+- Inverse MixColumns :
+
+  ```sh
+  def inv_mix_columns(state):
+    return [
+        gf_mul(0x3, state[0]) ^ gf_mul(0x2, state[1]),
+        gf_mul(0x2, state[0]) ^ gf_mul(0x3, state[1]),
+        gf_mul(0x3, state[2]) ^ gf_mul(0x2, state[3]),
+        gf_mul(0x2, state[2]) ^ gf_mul(0x3, state[3])
+    ]
+  ```
+
+  implementasi saat ini mengasumsikan bahwa operasi MixColumns adalah `involusi` (invers dari dirinya sendiri) dalam konteks Mini-AES ini
+
+- Inverse ShiftRows
+
+  ```sh
+  def inv_shift_rows(state):
+    return [state[0], state[3], state[2], state[1]]
+  ```
+
+  Fungsi ini melakukan pergeseran baris secara terbalik dari operasi shift_rows pada enkripsi.
+
+### Output
+
+![output hasil dekripsi](/img/output-dekripsi.png)
 
 ## Analisis Avalanche Effect pada Mini-AES
 
@@ -158,5 +219,3 @@ Prosedur pengujian yang digunakan:
    - Hitung berapa banyak bit yang berubah dalam ciphertext
    - Hitung persentase perubahan (jumlah bit yang berubah / total bit)
 3. Hitung rata-rata persentase perubahan bit untuk semua posisi bit
-
-
