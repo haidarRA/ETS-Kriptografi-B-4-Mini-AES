@@ -219,3 +219,82 @@ Prosedur pengujian yang digunakan:
    - Hitung berapa banyak bit yang berubah dalam ciphertext
    - Hitung persentase perubahan (jumlah bit yang berubah / total bit)
 3. Hitung rata-rata persentase perubahan bit untuk semua posisi bit
+
+## Penambahan ECB dan CBC `ecbc.py`
+
+### 1. **Modul yang Digunakan**
+
+- `os`: Digunakan untuk menghasilkan angka acak (random bytes) yang akan digunakan sebagai kunci (key) dan vektor inisialisasi (IV).
+- `S_BOX`: Ini adalah sebuah tabel yang digunakan untuk substitusi byte, yang merupakan bagian penting dari algoritma kriptografi simetris. Setiap byte dari data akan diganti menggunakan S-Box ini.
+- `INV_S_BOX`: Merupakan invers dari S-Box yang digunakan untuk proses dekripsi.
+
+### 2. **Fungsi Substitusi dan Invers Substitusi**
+
+- `substitute(byte)`: Fungsi ini menerima satu byte dan menggantinya dengan nilai yang sesuai berdasarkan S-Box.
+- `inverse_substitute(byte)`: Fungsi ini melakukan invers dari substitusi dengan menggunakan tabel invers S-Box untuk proses dekripsi.
+
+### 3. **Enkripsi dan Dekripsi Blok**
+
+- `encrypt_block(block, key)`: Fungsi ini mengenkripsi sebuah blok yang terdiri dari 2 byte menggunakan substitusi byte dan XOR dengan kunci.
+- `decrypt_block(block, key)`: Fungsi ini mendekripsi sebuah blok yang terdiri dari 2 byte dengan cara pertama-tama melakukan XOR dengan kunci, lalu melakukan invers substitusi byte.
+
+### 4. **Mode ECB (Electronic Codebook)**
+
+- `encrypt_ecb(plaintext, key)`: Fungsi ini mengenkripsi plaintext dengan menggunakan mode ECB, yang membagi plaintext menjadi blok-blok berukuran 2 byte. Setiap blok kemudian dienkripsi secara independen.
+- `decrypt_ecb(ciphertext, key)`: Fungsi ini mendekripsi ciphertext yang sudah dienkripsi dengan mode ECB dengan cara yang mirip, yaitu memecah ciphertext menjadi blok-blok dan mendekripsinya satu per satu.
+
+**Mode ECB** memiliki kelemahan karena pola data yang sama dalam plaintext akan menghasilkan ciphertext yang sama, sehingga bisa rentan terhadap analisis pola.
+
+### 5. **Mode CBC (Cipher Block Chaining)**
+
+![Proses Enkripsi CBC](/img/CBCenkrip.png)
+
+- `encrypt_cbc(plaintext, key, iv)`: Fungsi ini mengenkripsi plaintext dengan mode CBC. Pada mode ini, blok plaintext pertama akan di-XOR dengan IV (Inisialization Vector) sebelum dienkripsi, dan hasilnya digunakan untuk XOR dengan blok plaintext berikutnya. Ini memberikan sifat chaining antara blok-blok.
+- `decrypt_cbc(ciphertext, key, iv)`: Fungsi ini mendekripsi ciphertext yang sudah dienkripsi dengan mode CBC dengan cara pertama-tama mendekripsi setiap blok, lalu melakukan XOR dengan blok sebelumnya (atau IV untuk blok pertama) untuk mendapatkan plaintext asli.
+
+**Mode CBC** lebih aman dibandingkan dengan ECB karena setiap blok ciphertext bergantung pada blok sebelumnya, yang mencegah pola yang mudah dikenali.
+
+### 6. **Fungsi Pembantu**
+
+- `get_bytes_from_hexstring(hex_string)`: Fungsi ini mengkonversi string hex menjadi bytes, yang diperlukan saat menerima input dari pengguna dalam format hexadecimal.
+
+### 7. **Alur Utama Program**
+
+- Program meminta input dari pengguna untuk menentukan apakah akan melakukan enkripsi atau dekripsi (`encrypt` atau `decrypt`).
+- Jika memilih **enkripsi**:
+  - Pengguna memasukkan plaintext yang akan dienkripsi.
+  - Kunci (key) dan IV (jika mode CBC) dihasilkan secara acak menggunakan `os.urandom()`.
+  - Proses enkripsi dilakukan sesuai dengan mode yang dipilih (ECB atau CBC), dan hasilnya ditampilkan dalam format hexadecimal.
+- Jika memilih **dekripsi**:
+  - Pengguna memasukkan ciphertext dalam format hex dan kunci yang digunakan saat enkripsi.
+  - IV diminta jika mode yang dipilih adalah CBC.
+  - Proses dekripsi dilakukan sesuai dengan mode yang dipilih, dan hasilnya (plaintext) ditampilkan.
+
+### 8. **Proses enkripsi dan dekripsi:**
+
+- Pada mode **ECB**, setiap blok plaintext (ukuran 2 byte) diproses secara terpisah dan langsung dienkripsi.
+- Pada mode **CBC**, sebelum mengenkripsi blok plaintext, blok pertama di-XOR dengan IV, dan blok berikutnya di-XOR dengan hasil enkripsi blok sebelumnya.
+
+### HASIL ENKRIP DAN DEKRIP CBC
+
+![Proses Enkripsi CBC](/img/CBCenkrip.png)
+
+![Proses Dekripsi CBC](/img/CBCdekrip.png)
+
+### HASIL ENKRIP DAN DEKRIP ECB
+
+![Proses Enkripsi ECBC](/img/ECBenkrip.png)
+
+![Proses Enkripsi ECBC](/img/ECBdekrip.png)
+
+## Export dan Import File `txtcsv.py`
+
+Alur Kerja:
+
+- **Input:** Sebuah string dalam format hexadecimal.
+- **Proses:**
+  - Fungsi `strip()` menghapus spasi ekstra di awal atau akhir string.
+  - Fungsi `bytes.fromhex()` digunakan untuk mengubah string hex yang sudah dibersihkan menjadi bytes.
+- **Output:** Data dalam format bytes.
+
+![Proses log](/img/tocsv.png)
